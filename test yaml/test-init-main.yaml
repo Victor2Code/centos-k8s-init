@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-init-main
+  labels:
+    app: myapp
+    version: v1
+spec:
+  containers:
+    - name: my-busybox
+      image: busybox
+      command: ['sh','-c','echo Main app is running && sleep 3600']
+  initContainers:
+    - name: init-myservice
+      image: busybox
+      command: ['sh','-c','until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+    - name: init-mydb
+      image: busybox
+      command: ['sh','-c','until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
