@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-liveness-tcpsocket
+  namespace: default
+  labels:
+    app: myapp
+    version: v1
+spec:
+  containers:
+    - name: mynginx
+      image: nginx
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        tcpSocket:
+          port: 8080
+        initialDelaySeconds: 1
+        periodSeconds: 3
+        timeoutSeconds: 5
