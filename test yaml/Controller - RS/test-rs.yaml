@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  name: test-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rs-app
+  template:
+    metadata:
+      labels:
+        app: rs-app
+    spec:
+      containers:
+        - name: mynginx
+          image: mynginx:v1
+          ports:
+            - containerPort: 80
