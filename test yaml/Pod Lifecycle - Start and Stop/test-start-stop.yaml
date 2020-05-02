@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-start-stop
+  labels:
+    app: myapp
+    version: v1
+spec:
+  containers:
+    - name: mynginx
+      image: nginx
+      lifecycle:
+        postStart:
+          exec:
+            command: ['sh','-c','echo Hello from postStart handler > /tmp/start']
+        preStop:
+          exec:
+            command: ['sh','-c', 'echo Hello from preStop handler > /tmp/stop']
