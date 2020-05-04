@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: test-daemonset
+spec:
+  selector:
+    matchLabels:
+      app: daemonset-app
+  template:
+    metadata:
+      labels:
+        app: daemonset-app
+    spec:
+      containers:
+        - name: mynginx
+          image: mynginx:v2
