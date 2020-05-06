@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mynginx-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mynginx
+        version: v2
+    spec:
+      containers:
+        - name: mynginx
+          image: mynginx:v2
+          ports:
+            - containerPort: 80
