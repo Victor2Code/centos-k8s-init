@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mynginx-rewrite
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: http://mynginx.xiaofu.com:31958
+spec:
+  rules:
+    - host: redirect.xiaofu.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: mynginx-service
+              servicePort: 8080

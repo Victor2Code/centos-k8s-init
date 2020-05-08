@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mynginx-http
+spec:
+  rules:
+    - host: mynginx.xiaofu.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: mynginx-service
+              servicePort: 8080
