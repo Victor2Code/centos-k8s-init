@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: test-volume-emptydir
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: test-volume-emptydir
+    spec:
+      containers:
+        - name: mynginx
+          image: mynginx:v2
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: test-emptydir
+        - name: myalpine
+          image: alpine
+          command: ["ping","8.8.8.8"]
+          volumeMounts:
+            - mountPath: /emptydir
+              name: test-emptydir
+      volumes:
+        - name: test-emptydir
+          emptyDir: {}

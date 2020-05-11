@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: test-volume-hostpath
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: test-volume-hostpath
+    spec:
+      containers:
+        - name: mynginx
+          image: mynginx:v2
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: test-hostpath
+        - name: myalpine
+          image: alpine
+          command: ["ping","8.8.8.8"]
+          volumeMounts:
+            - mountPath: /hostpath
+              name: test-hostpath
+      volumes:
+        - name: test-hostpath
+          hostPath:
+            path: /tmp/hostpath
+            type: DirectoryOrCreate
