@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: test-pv-nfs1
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: bronze
+  nfs:
+    path: /share/nfs1
+    server: 172.29.56.177
+---
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: test-pv-nfs2
+  spec:
+    capacity:
+      storage: 8Gi
+    accessModes:
+      - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: silver
+    nfs:
+      path: /share/nfs2
+      server: 172.29.56.177
+---
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: test-pv-nfs3
+  spec:
+    capacity:
+      storage: 10Gi
+    accessModes:
+      - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: gold
+    nfs:
+      path: /share/3
+      server: 172.29.56.177
