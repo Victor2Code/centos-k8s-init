@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: test-toleration
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: deployment-app
+    spec:
+      containers:
+        - name: mynginx
+          image: mynginx:v2
+          ports:
+            - containerPort: 80
+      tolerations:
+        - key: xiaofu
+          operator: Exists
+          
