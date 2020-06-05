@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rasa-headless-service
+  namespace: default
+  labels:
+    app: rasa-headless
+spec:
+  type: ClusterIP
+  clusterIP: None  #<-- Careful
+  selector:
+    app: rasa-reception
+  ports:
+    - name: http
+      port: 5005
+      targetPort: 5005
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rasa-reception
+spec:
+  selector:
+    matchLabels:
+      app: rasa-reception
+  serviceName: rasa-headless-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rasa-reception
+    spec:
+      containers:
+        - name: mynginx
+          image: myrasa:v2
+          ports:
+            - containerPort: 5005
+              name: http
+          command: ["/bin/sh","-c","rasa run --enable-api"]
+          livenessProbe:
+            httpGet:
+              port: 5005
+              path: /
+            initialDelaySeconds: 1
+            periodSeconds: 3
+          resources:
+            limits:
+              aliyun.com/gpu-mem: 1
+          volumeMounts:
+            - name: rasa-app
+              mountPath: /app
+            - name: rasa-tmp
+              mountPath: /tmp
+      volumes:
+        - name: rasa-tmp
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: rasa-app
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: gold
+        resources:
+          requests:
+            storage: 5Gi

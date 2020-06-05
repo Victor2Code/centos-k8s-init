@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rasa-deployment-2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rasa
+    spec:
+      containers:
+        - name: myrasa
+          image: myrasa:v2
+          ports:
+            - containerPort: 5005
+              hostPort: 5005
+              protocol: TCP
+          command: ["/bin/sh","-c","rasa init --no-prompt;rasa run --enable-api"]
+          livenessProbe:
+            httpGet:
+              port: 5005
+              path: /
+            initialDelaySeconds: 1
+            periodSeconds: 3
+          resources:
+            limits:
+              aliyun.com/gpu-mem: 1
+          volumeMounts:
+            - mountPath: /app
+              name: rasa-app
+            - mountPath: /tmp
+              name: rasa-tmp
+      volumes:
+        - name: rasa-app
+          emptyDir: {}
+        - name: rasa-tmp
+          emptyDir: {}

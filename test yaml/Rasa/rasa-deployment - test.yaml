@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rasa-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rasa
+    spec:
+      containers:
+        - name: myrasa
+          image: myrasa:v2
+          ports:
+            - containerPort: 5005
+          command: ["sleep","60000"]
+          resources:
+            limits:
+              aliyun.com/gpu-mem: 1
+          volumeMounts:
+            - mountPath: /app
+              name: rasa-app
+            - mountPath: /tmp
+              name: rasa-tmp
+      volumes:
+        - name: rasa-app
+          emptyDir: {}
+        - name: rasa-tmp
+          emptyDir: {}
